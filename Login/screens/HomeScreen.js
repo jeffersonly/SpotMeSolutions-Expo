@@ -1,10 +1,10 @@
 //import _ from 'lodash';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, AsyncStorage } from 'react-native';
+import { View, Text, AsyncStorage } from 'react-native';
 //import { AppLoading } from 'expo';
 //import Slides from '../components/Slides';
 
-class Signin extends Component {
+class HomeScreen extends Component {
 
   signIn = async () => {
     await AsyncStorage.setItem('userToken', 'Colin')
@@ -13,10 +13,10 @@ class Signin extends Component {
   render() {
     return (
     <View>
-        <Button title="Complete Sign In" onPress={this.signIn} />
+        <Text>HomeScreen</Text>
     </View>
     )
   }
 }
 
-export default Signin;
+export default HomeScreen;

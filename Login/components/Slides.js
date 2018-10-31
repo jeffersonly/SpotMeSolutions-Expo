@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, Animated } from 'react-native';
 import { Button } from 'react-native-elements';
+import TutImages from '../components/TutImages';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -23,7 +24,9 @@ class Slides extends Component {
     return this.props.data.map(slide => {
       return (
         <View key={slide.text} style={ [styles.slideStyle, {backgroundColor: slide.color}]}>
+          <TutImages image={slide.image} />
           <Text style={styles.textStyle}>{slide.text}</Text>
+          <Text style={styles.subTextStyle}>{slide.subText}</Text>
         </View>
       );
     });
@@ -50,7 +53,7 @@ class Slides extends Component {
 				</ScrollView>
 
 				<View
-          style={{ flexDirection: 'row', backgroundColor: '#03A9F4', width: SCREEN_WIDTH, justifyContent: 'center'}} // this will layout our dots horizontally (row) instead of vertically (column)
+          style={{ flexDirection: 'row', backgroundColor: '#EAF3FE', width: SCREEN_WIDTH, justifyContent: 'center'}} // this will layout our dots horizontally (row) instead of vertically (column)
           >
           {this.props.data.map((_, i) => { // the _ just means we won't use that parameter
             let opacity = position.interpolate({
@@ -63,7 +66,7 @@ class Slides extends Component {
             return (
               <Animated.View // we will animate the opacity of the dots so use Animated.View instead of View here
                 key={i} // we will use i for the key because no two (or more) elements in an array will have the same index
-                style={{ opacity, height: 10, width: 10, backgroundColor: '#595959', margin: 8, borderRadius: 5 }}
+                style={{ opacity, height: 10, width: 10, backgroundColor: '#1AE6CB', margin: 8, borderRadius: 5 }}
               />
             );
           })}
@@ -81,10 +84,18 @@ const styles = {
     width: SCREEN_WIDTH
   },
   textStyle: {
-    fontSize: 30,
+    fontSize: 25,
+    fontWeight: 'bold',
     textAlign: 'center',
-    color: 'white',
-    margin: 50
+    color: '#1AE6CB',
+    marginTop: 20
+  },
+  subTextStyle: {
+    fontSize: 18,
+    marginHorizontal: 25,
+    margin: 10,
+    textAlign: 'center',
+    color: '#1AE6CB',
   },
   buttonStyle: {
     backgroundColor: '#0288D1',
