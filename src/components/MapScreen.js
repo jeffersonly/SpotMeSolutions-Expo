@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, TouchableHighlight, Image } from 'react-native'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { connect } from 'react-redux';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import SearchBox from './SearchBox';
 //import DarkMapStyles from '../mapstyles/DarkMapStyles';
 import MidnightCommander from '../mapstyles/MidnightCommander';
 import {
@@ -18,15 +17,20 @@ import {
 import garageMarker from '../images/garage.png';
 //import carMarker from '../images/car_icon.png';
 import carMarker from '../images/car.png';
+import banana from '../images/banana.png';
+import spotMarker from '../images/spotmarker.png';
 
+// Can not access coord outside of render
+//let coord = this.props.currentLocation;
 
 class MapScreen extends Component {
-    constructor(props) {
+  constructor(props) {
       super(props);
       
+      //Need to set this initialization to be inside of render somehow
       this.state = {
-        lat: this.currentLocation.lat,
-        long: this.currentLocation.long
+        lat: 37.3382, //this.currentLocation.lat,
+        long: -121.8863//this.currentLocation.long
       };
     }
 
@@ -39,6 +43,23 @@ class MapScreen extends Component {
     }
 
     render() {
+      //console.log(coord);
+      const coord = this.props.currentLocation;
+      console.log(coord);
+      //console.log(coord.latitude);
+      //console.log(coord.longitude);
+      /*
+
+      //Try to set state based on current location coords
+      //TypeError:
+      //coord.setState is not a function, coord.setState is undefined 
+
+      coord.setState({
+        //Latitude and Longitude
+        lat: coord.latitude,
+        long: coord.longitude
+      });
+      */
       const currentInstance = this;
       return (
         <View style={styles.outerContainer}>
@@ -64,17 +85,23 @@ class MapScreen extends Component {
                 region={{
                   latitude: currentInstance.state.lat,
                   longitude: currentInstance.state.long,
-                  latitudeDelta: 0.0112,
-                  longitudeDelta: 0.01412
+                  latitudeDelta: 0.0312,
+                  longitudeDelta: 0.03412
                 }}
                 customMapStyle={MidnightCommander}
                 //customMapStyle={DarkMapStyles}
               > 
+                  <MapView.Marker 
+                    //Creates a marker that is at your current location
+                    coordinate={{ latitude: coord.latitude, longitude: coord.longitude }}
+                    description={'Current Location'}
+                  />
 
                   <MapView.Marker 
                   coordinate={{ latitude: currentInstance.state.lat, longitude: currentInstance.state.long }}
                   description={currentInstance.state.description}
-                  //image={carMarker}
+                  //image={banana}
+                  image={carMarker}
                   //description={this.props.sanjose.garageAvailable}
                   />
 
@@ -83,19 +110,19 @@ class MapScreen extends Component {
                         //Can later pull coord, title, descrip from API when implemented
                         title={'SJSU North Parking Garage'}
                         description={'Spots Filled: 977/1490'}
-                        image={garageMarker}
+                        image={spotMarker}
                   />
                   <MapView.Marker
                       coordinate={{ latitude: 37.332303, longitude: -121.882986, }}
                       title={'SJSU West Parking Garage'}
                       description={'Spots Filled: 827/1135'}
-                      image={garageMarker}
+                      image={spotMarker}
                   />
                   <MapView.Marker
                       coordinate={{ latitude: 37.333088, longitude: -121.880797, }}
                       title={'SJSU South Parking Garage'}
                       description={'Spots Filled: 1377/1500'}
-                      image={garageMarker}
+                      image={spotMarker}
                   />
 
               <GooglePlacesAutocomplete
