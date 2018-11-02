@@ -13,7 +13,7 @@ class Signin extends Component {
   render() {
     return (
     <View>
-        <Button title="Complete Sign In" onPress={this.signIn} />
+        <Button title="Sign in with Facebook" onPress={this.signIn} />
     </View>
     )
   }

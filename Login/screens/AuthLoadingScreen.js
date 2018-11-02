@@ -21,11 +21,9 @@ class AuthLoadingScreen extends Component {
 
   render() {
     return (
-      
-        <View style={styles.container}>
-            <ActivityIndicator />
-        </View>
-      
+      <View style={styles.container}>
+          <ActivityIndicator />
+      </View>
     )
   }
 }
