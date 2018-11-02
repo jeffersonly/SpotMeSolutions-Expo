@@ -12,6 +12,7 @@ import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import LogoTitle from './components/LogoTitle';
 import Icon from 'react-native-vector-icons/Ionicons'
+import FacebookAuth from './screens/FacebookAuth';
 
 const AuthStackNavigator = createStackNavigator({
   Welcome: WelcomeScreen,
@@ -48,23 +49,33 @@ const AppDrawerNavigator = createDrawerNavigator({
   Home: AppStackNavigator
 })
 
+const AppSwitchNavigator = createSwitchNavigator({
+  AuthLoadingScreen: AuthLoadingScreen,
+  Auth: AuthStackNavigator,
+  App: AppDrawerNavigator,
+  FbAuth: FacebookAuth
+})
+
 class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={StyleSheet.container}>
-        
-        </View>
+        {/* <View style={StyleSheet.container}>
+          <AppSwitchNavigator />
+        </View> */}
+        <AppSwitchNavigator />
       </Provider>
     );
   }
 }
 
-export default createSwitchNavigator({
-  AuthLoadingScreen: AuthLoadingScreen,
-  Auth: AuthStackNavigator,
-  App: AppDrawerNavigator
-})
+export default App;
+
+// export default createSwitchNavigator({
+//   AuthLoadingScreen: AuthLoadingScreen,
+//   Auth: AuthStackNavigator,
+//   App: AppDrawerNavigator
+// })
 
 // const styles = StyleSheet.create({
 //   container: {

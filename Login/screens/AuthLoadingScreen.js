@@ -14,9 +14,8 @@ class AuthLoadingScreen extends Component {
   }
 
   loadApp = async() => {
-    const userToken = await AsyncStorage.getItem('userToken')
-
-    this.props.navigation.navigate(userToken ? 'App': 'Auth')
+    const userToken = await AsyncStorage.getItem('fb_token');
+    this.props.navigation.navigate(userToken ? 'App': 'Auth');
   }
 
   render() {
