@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dimensions, StyleSheet, View, Text, TouchableHighlight, Image } from 'react-native';
-import MapView, { PROVIDER_GOOGLE , Marker, AnimatedRegion} from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE , Marker, AnimatedRegion, Region} from 'react-native-maps';
 import { connect } from 'react-redux';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import DarkMapStyles from '../mapstyles/DarkMapStyles';
@@ -28,8 +28,16 @@ class MapScreen extends Component {
       super(props);
       this.state = {
         isMapReady: false,
-        lat: 37.339222,
-        long: -121.880724,
+        coordinate: new AnimatedRegion({
+          latitude: 37.339222,
+          longitude: -121.880724,
+        }),
+        screenCoord: new AnimatedRegion({
+          latitude: 37.339222,
+          longitude: -121.880724,
+          latitudeDelta: 1,
+          longitudeDelta: 1
+        })
       };
     }
 
@@ -47,9 +55,21 @@ class MapScreen extends Component {
       this.setState({isMapReady: true});
     }
 
-    changeLoc(){
-      this.marker.forceUpdate();
-      console.log("force updated");
+    changeLoc(lat, lng){
+      var newCoord = {
+        latitude: lat,
+        longitude: lng
+      };
+
+      var reg = new AnimatedRegion({
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: 1,
+        longitudeDelta: 1
+      });
+
+      this.state.coordinate.timing(newCoord).start();
+      this.mapRef.animateToRegion(reg, 500);
     }
 
     render() {
@@ -105,12 +125,12 @@ class MapScreen extends Component {
                 //console.log('Reached');
           
 
-                this.state = {
-                  lat: details.geometry.location.lat,
-                  long: details.geometry.location.lng
-                }
+                // this.state = {
+                //   lat: details.geometry.location.lat,
+                //   long: details.geometry.location.lng
+                // }
 
-                this.changeLoc();
+                this.changeLoc(details.geometry.location.lat,details.geometry.location.lng);
 
 
 
@@ -149,26 +169,20 @@ class MapScreen extends Component {
             <MapView
               provider={PROVIDER_GOOGLE}
               style={styles.map}
-              region={{
-                latitude: currentInstance.state.lat,
-                longitude: currentInstance.state.long,
-                latitudeDelta: 1,
-                longitudeDelta: 1
-              }}
+              region={this.state.screenCoord}
               //customMapStyle={MidnightCommander}
               onLayout = {this.onMapLayout}
+              ref = {(instance) => {
+                this.mapRef = instance;
+              }}
               //customMapStyle={DarkMapStyles}
             >
               { this.state.isMapReady && 
                 <View>
                   <Marker.Animated 
-                    coordinate={{ latitude: this.state.lat, longitude: this.state.long }}
+                    coordinate={this.state.coordinate}
                     description={this.state.description}
-                    ref= {
-                      (instance) => {
-                        this.marker = instance;
-                      }
-                    }
+                    
                   />
                   <Marker
                     coordinate={{ latitude: 37.339222, longitude: -121.880724, }}
