@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+/*import React, { Component } from 'react';
 import { Text, View, Image, Button, Dimensions } from 'react-native';
 
 class Favorite extends Component {
@@ -114,4 +114,4 @@ const styles = {
     textDecorationLine: 'underline'
   }
 };
-export default Favorite;
+export default Favorite;*/

@@ -1,3 +1,4 @@
+/*
 import React, { Component } from 'react';
 import { Text, View, Image, Button } from 'react-native';
 
@@ -121,3 +122,4 @@ const styles = {
   }
 };
 export default History;
+*/

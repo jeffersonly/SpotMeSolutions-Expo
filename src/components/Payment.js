@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+/*import React, { Component } from 'react';
 import { Text, View, Image, Button, Dimensions } from 'react-native';
 
 class Payment extends Component {
@@ -98,4 +98,4 @@ const styles = {
     textDecorationLine: 'underline'
   }
 };
-export default Payment;
+export default Payment;*/
