@@ -46,7 +46,8 @@ const AppStackNavigator = createStackNavigator({
 })
 
 const AppDrawerNavigator = createDrawerNavigator({
-  Home: AppStackNavigator
+  Home: AppStackNavigator,
+  Settings: SettingsScreen
 })
 
 const AppSwitchNavigator = createSwitchNavigator({
