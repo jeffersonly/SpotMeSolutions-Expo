@@ -14,6 +14,10 @@ import LogoTitle from './components/LogoTitle';
 import Icon from 'react-native-vector-icons/Ionicons'
 import FacebookAuth from './screens/FacebookAuth';
 
+import Profile from './screens/Profile';
+import Favorite from './screens/Favorite';
+import History from './screens/History';
+
 const AuthStackNavigator = createStackNavigator({
   Welcome: WelcomeScreen,
   Signin: Signin,
@@ -25,7 +29,16 @@ const AppTabNavigator = createBottomTabNavigator({
     screen: HomeScreen,
   },
   Settings: {
-    screen: SettingsScreen
+    screen: SettingsScreen,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  Favorite: {
+    screen: Favorite,
+  },
+  Profile: {
+    screen: Profile,
   }
 })
 
@@ -47,7 +60,10 @@ const AppStackNavigator = createStackNavigator({
 
 const AppDrawerNavigator = createDrawerNavigator({
   Home: AppStackNavigator,
-  Settings: SettingsScreen
+  Settings: SettingsScreen,
+  Profile: Profile,
+  Favorite: Favorite,
+  History: History
 })
 
 const AppSwitchNavigator = createSwitchNavigator({

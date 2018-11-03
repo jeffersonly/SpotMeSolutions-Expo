@@ -13,18 +13,18 @@ class Signin extends Component {
   //   this.props.navigation.navigate('FacebookLogin')
   // }
   signIn = () => {
-    this.props.navigation.navigate('FbAuth')
+    this.props.navigation.navigate('App')
   }
 
   render() {
     return (
     <View style={styles.BtnContainer}>
-        <Button 
-          primary 
-          style={styles.FbBtn} 
-          onPress={this.signIn} 
+        <Button
+          primary
+          style={styles.FbBtn}
+          onPress={this.signIn}
         >
-          <Icon name="logo-facebook" /> 
+          <Icon name="logo-facebook" />
           <Text style={styles.TxtContainer}>
             Continue with Facebook
           </Text>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   FbBtn: {
     alignSelf: 'stretch',
-    justifyContent: 'center', 
+    justifyContent: 'center',
     marginHorizontal: 50
   },
   TxtContainer: {
