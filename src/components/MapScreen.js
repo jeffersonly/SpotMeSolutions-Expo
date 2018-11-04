@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, View, Text, TouchableHighlight, Image } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion, Region} from 'react-native-maps';
+import { 
+  Dimensions, 
+  StyleSheet, 
+  View, 
+  Text, 
+  TouchableHighlight, 
+  Image,
+  Platform 
+} from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion } from 'react-native-maps';
+import { Constants, Location, Permissions } from 'expo';
 import { connect } from 'react-redux';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import DarkMapStyles from '../mapstyles/DarkMapStyles';
@@ -14,14 +23,11 @@ import {
   fetchSanJoseAPI
 } from '../actions';
 
-import garageMarker from '../images/garage.png';
+//import garageMarker from '../images/garage.png';
 //import carMarker from '../images/car_icon.png';
-//import carMarker from '../images/car.png';
+import carMarker from '../images/car.png';
 import banana from '../images/banana.png';
-//import spotMarker from '../images/spotmarker.png';
-
-// Can not access coord outside of render
-//let coord = this.props.currentLocation;
+import spotMarker from '../images/spotmarker.png';
 
 class MapScreen extends Component {
   constructor(props) {
@@ -30,27 +36,55 @@ class MapScreen extends Component {
         isMapReady: false,
         //Initial map region
         coordinate: new AnimatedRegion({
-          latitude: 37.3382,
-          longitude: -121.8863,
+          latitude: 0,
+          longitude: 0,
         }),
         //Updated map region based on search
         screenCoord: new AnimatedRegion({
-          latitude: 37.3382,
-          longitude: -121.8863,
-          latitudeDelta: 0.0312,
-          longitudeDelta: 0.03412
-        })
+          latitude: 0,
+          longitude: 0,
+          latitudeDelta: 0.00112,
+          longitudeDelta: 0.001412
+        }),
       };
     }
+    //The state of current location
+    state = {
+      location: null,
+      errorMessage: null,
+    };
 
+    //Calls the function to get current location
     componentDidMount() {
-      console.log(this.state);
+      if (Platform.OS === 'android' && !Constants.isDevice) {
+        this.setState({
+          errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+        });
+      } else {
+        this.getLocationAsync();
+      }
     }
+    
 
     //If the map ready boolean is true, the state of the map is changed (Redirected)
     onMapLayout = () => {
       this.setState({ isMapReady: true });
     }
+
+    //Gets the current location and changes the state of current location
+    getLocationAsync = async () => {
+      const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== 'granted') {
+        this.setState({
+          errorMessage: 'Permission to access location was denied',
+        });
+      }
+  
+      const location = await Location.getCurrentPositionAsync({});
+      console.log(location);
+      this.setState({ location });
+      this.changeLoc(location.coords.latitude, location.coords.longitude);
+    };
 
     //Set to change the location based on the new coordinates that are held
     changeLoc(lat, lng) {
@@ -58,24 +92,47 @@ class MapScreen extends Component {
         latitude: lat,
         longitude: lng
       };
+      // this.state.coordinate = new AnimatedRegion({
+      //     latitude: lat,
+      //     longitude: lng
+      // });
 
-      //Used for holding latitude and longitude of a loaded location
-      const reg = new AnimatedRegion({
-        latitude: lat,
-        longitude: lng,
-        latitudeDelta: 0.0312,
-        longitudeDelta: 0.03412
+      this.state.screenCoord = new AnimatedRegion({
+          latitude: lat,
+          longitude: lng,
+          latitudeDelta: 0.0312,
+          longitudeDelta: 0.03412
       });
+      //Used for holding latitude and longitude of a loaded location
+      // const reg = new AnimatedRegion({
+      //   latitude: lat,
+      //   longitude: lng,
+      //   latitudeDelta: 0.0312,
+      //   longitudeDelta: 0.03412
+      // });
+
 
       //Redirects map to new location (animated load)
       this.state.coordinate.timing(newCoord).start();
-      this.mapRef.animateToRegion(reg, 500);
+      this.mapRef.animateToRegion(this.state.screenCoord, 500);
     }
 
     render() {
-      //console.log(coord);
-      const coord = this.props.currentLocation;
-      console.log(coord);
+      let longitude = 'Waiting..';
+      let latitude = 'Waiting..';
+      if (this.state.errorMessage) {
+        longitude = this.state.errorMessage;
+        latitude = this.state.errorMessage;
+      } else if (this.state.location) {
+        //Getting the information of current location from state
+        //Error for andriod when getting long, lat because
+        //it returns the values in a string form that ios can convert to double
+        //but andriod can not convert it to double (null to be specific)
+        longitude = this.state.location.coords.longitude;
+        latitude = this.state.location.coords.latitude;
+        //int long = parseInt(longitude);
+        //int lat = parseInt(latitude);
+      }
 
       return (
         <View style={styles.outerContainer}>
@@ -97,8 +154,10 @@ class MapScreen extends Component {
             <MapView
               provider={PROVIDER_GOOGLE}
               style={styles.map}
+              //props error on region, expected number but got object
+              //error doesnt have big effect/matter but gives a warning
               region={this.state.screenCoord}
-              //customMapStyle={MidnightCommander}
+              customMapStyle={MidnightCommander}
               onLayout={this.onMapLayout}
               ref={(instance) => {
                 this.mapRef = instance;
@@ -110,33 +169,43 @@ class MapScreen extends Component {
                   <Marker.Animated 
                     coordinate={this.state.coordinate}
                     //Description is not being displayed
-                    description={this.state.description}
+                    //description={this.state.description}
+                    description={'Your Destination'}
                     image={banana}
+                    style={styles.markerStyle}
+                  />
+                  <Marker 
+                    coordinate={{ latitude, longitude }}
+                    description={'Current Location'}
+                    image={carMarker}
+                    style={styles.locationStyle}
                   />
                   <Marker
                     coordinate={{ latitude: 37.339222, longitude: -121.880724, }}
                     //Can later pull coord, title, descrip from API when implemented
                     title={'SJSU North Parking Garage'}
                     description={'Spots Filled: 977/1490'}
-                    image={garageMarker}
+                    image={spotMarker}
+                    style={styles.markerStyle}
                   />
                   <Marker
                     coordinate={{ latitude: 37.332303, longitude: -121.882986, }}
                     title={'SJSU West Parking Garage'}
                     description={'Spots Filled: 827/1135'}
-                    image={garageMarker}
+                    image={spotMarker}
+                    style={styles.markerStyle}
                   />
                   <Marker
                     coordinate={{ latitude: 37.333088, longitude: -121.880797, }}
                     title={'SJSU South Parking Garage'}
                     description={'Spots Filled: 1377/1500'}
-                    image={garageMarker}
+                    image={spotMarker}
+                    style={styles.markerStyle}
                   />
                 </View> 
               }
-              
             </MapView>
-
+            
             <GooglePlacesAutocomplete 
               placeholder='Search a location or garage!' 
               minLength={2} //Minimum length of text entered for autocomplete results
@@ -147,7 +216,6 @@ class MapScreen extends Component {
               renderDescription={row => row.description}
               onPress={(data, details = null) => {
                 this.changeLoc(details.geometry.location.lat, details.geometry.location.lng);
-
                 return details;
               }}
               getDefaultValue={() => ''}
@@ -245,6 +313,12 @@ class MapScreen extends Component {
       lineHeight: 23,
       flex: 2
     },
+    locationStyle: {
+      zIndex: 99
+    },
+    markerStyle: {
+      zIndex: 98
+    }
   };
 
   const mapStateToProps = ({ loc }) => {

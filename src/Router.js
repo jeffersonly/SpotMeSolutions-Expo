@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from 'react-navigation';
 
 //import Payment from './components/Payment';
-//import Favorite from './components/Favorite';
+import Favorite from './components/Favorite';
 //import History from './components/History';
 import MapScreen from './components/MapScreen';
 import MenuScreen from './components/MenuScreen';
@@ -14,7 +14,7 @@ const RouterComponent = createDrawerNavigator({
   },
   Favorite: {
     path: '/sent',
-    screen: MenuScreen
+    screen: Favorite
   },
   Payment: {
     path: '/sent',
