@@ -5,11 +5,11 @@ import { View, Text, AsyncStorage } from 'react-native';
 //import Slides from '../components/Slides';
 
 class HomeScreen extends Component {
-
-  signIn = async () => {
-    await AsyncStorage.setItem('userToken', 'Colin')
-    this.props.navigation.navigate('App')
-  }
+  // signIn = async () => {
+  //   console.log("this loaded");
+  //   await AsyncStorage.setItem('userToken', 'Colin')
+  //   this.props.navigation.navigate('App')
+  // }
   render() {
     return (
     <View>

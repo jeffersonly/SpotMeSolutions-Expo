@@ -17,6 +17,8 @@ import FacebookAuth from './screens/FacebookAuth';
 import Profile from './screens/Profile';
 import Favorite from './screens/Favorite';
 import History from './screens/History';
+import MapApp from "./src/App";
+// import AppDrawerNavigator from "./SpotMeReact/App"
 
 const AuthStackNavigator = createStackNavigator({
   Welcome: WelcomeScreen,
@@ -69,7 +71,7 @@ const AppDrawerNavigator = createDrawerNavigator({
 const AppSwitchNavigator = createSwitchNavigator({
   AuthLoadingScreen: AuthLoadingScreen,
   Auth: AuthStackNavigator,
-  App: AppDrawerNavigator,
+  App: MapApp,
   FbAuth: FacebookAuth
 })
 

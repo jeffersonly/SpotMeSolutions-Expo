@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Image, View, Text, AsyncStorage } from 'react-native';
 import { Button } from 'native-base';
-import { createBottomTabNavigator, createSwitchNavigator, createStackNavigator } from 'react-navigation';
+// import { createBottomTabNavigator, createSwitchNavigator, createStackNavigator } from 'react-navigation';
 
 //import { AppLoading } from 'expo';
 import Slides from '../components/Slides';
@@ -32,6 +32,10 @@ const SLIDE_DATA = [
 ];
 
 class WelcomeScreen extends Component {
+  constructor(props){
+    super(props);
+    console.log(props);
+  }
   static navigationOptions = {
     header: null
     // headerTitle: <LogoTitle />,
